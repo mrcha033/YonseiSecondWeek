@@ -1,0 +1,271 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+}
+
+.container {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+h1 {
+    color: #2d2d2d;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.game-controls {
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+select, button {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #333;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+select {
+    background-color: #4a90e2;
+    color: white;
+}
+
+button {
+    background-color: #50c878;
+    color: white;
+}
+
+select:hover, button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #2d2d2d;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.mine-count, .timer {
+    font-family: 'Digital-7', 'Courier New', monospace;
+    font-size: 1.5rem;
+    color: #ff3b30;
+    text-shadow: 0 0 10px rgba(255,59,48,0.4);
+    background: #000;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    min-width: 100px;
+    text-align: center;
+}
+
+#gameBoard {
+    display: grid;
+    gap: 1px;
+    background-color: #a1a1a1;
+    padding: 3px;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    border: 3px solid;
+    border-color: #d4d4d4 #a1a1a1 #a1a1a1 #d4d4d4;
+}
+
+.cell {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    border: 2px solid;
+    border-color: #ffffff #a1a1a1 #a1a1a1 #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.1s ease;
+    box-shadow: inset -1px -1px 1px rgba(0,0,0,0.2);
+}
+
+.cell:hover:not(.revealed) {
+    background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+    transform: scale(1.05);
+    box-shadow: inset -2px -2px 3px rgba(0,0,0,0.1);
+}
+
+.cell.revealed {
+    background: #d1d1d1;
+    border: 1px solid #bdbdbd;
+    border-color: #a1a1a1;
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.2);
+    transform: none;
+}
+
+.cell.mine {
+    background: #ff3b30;
+    animation: explode 0.5s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.cell.mine::before {
+    content: '💥';
+    position: absolute;
+    font-size: 1.4rem;
+    animation: boom 0.5s ease-out forwards;
+}
+
+.cell.mine::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, #ff3b30 0%, transparent 70%);
+    animation: shockwave 0.5s ease-out;
+}
+
+.cell.flagged::after {
+    content: '🚩';
+    font-size: 1.2rem;
+    animation: popIn 0.2s ease-out;
+}
+
+/* 숫자 색상 스타일 개선 */
+.cell[data-number="1"] { color: #4a90e2; }
+.cell[data-number="2"] { color: #50c878; }
+.cell[data-number="3"] { color: #ff3b30; }
+.cell[data-number="4"] { color: #5856d6; }
+.cell[data-number="5"] { color: #bd3d3a; }
+.cell[data-number="6"] { color: #2ac7e1; }
+.cell[data-number="7"] { color: #2d2d2d; }
+.cell[data-number="8"] { color: #8e8e93; }
+
+/* 애니메이션 */
+@keyframes explode {
+    0% { 
+        transform: scale(1);
+        background: #ff3b30;
+    }
+    20% { 
+        transform: scale(1.3);
+        background: #ff5e3a;
+    }
+    40% {
+        transform: scale(1.1);
+        background: #ff3b30;
+    }
+    60% {
+        transform: scale(1.2);
+        background: #ff2d20;
+    }
+    100% { 
+        transform: scale(1);
+        background: #ff1a1a;
+    }
+}
+
+@keyframes popIn {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* 폭발 이모지 애니메이션 */
+@keyframes boom {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(2) rotate(180deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(3) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* 충격파 효과 */
+@keyframes shockwave {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+/* 파티클 스타일 */
+.particle {
+    position: absolute;
+    pointer-events: none;
+    background: #ff3b30;
+    border-radius: 50%;
+    animation: particle 0.8s ease-out forwards;
+}
+
+/* 파티클 애니메이션 */
+@keyframes particle {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        margin: 10px;
+    }
+
+    .cell {
+        width: 28px;
+        height: 28px;
+        font-size: 1rem;
+    }
+
+    .game-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+} 
+
+/* 숫자 스타일 개선 */
+.cell.revealed[data-number] {
+    font-weight: 600;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+} 

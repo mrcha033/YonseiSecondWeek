@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>지뢰 찾기</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>지뢰 찾기</h1>
+        
+        <div class="game-controls">
+            <select id="difficulty">
+                <option value="beginner">초급 (9x9, 지뢰 10개)</option>
+                <option value="intermediate">중급 (16x16, 지뢰 40개)</option>
+                <option value="expert">고급 (16x30, 지뢰 99개)</option>
+            </select>
+            <button id="newGameBtn">새 게임</button>
+        </div>
+
+        <div class="game-info">
+            <div class="mine-count">남은 지뢰: <span id="mineCount">10</span></div>
+            <div class="timer">시간: <span id="timer">0</span></div>
+        </div>
+        
+        <div id="gameBoard"></div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html> 
